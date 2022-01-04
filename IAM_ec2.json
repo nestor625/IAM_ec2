@@ -1,0 +1,95 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ec2createtags",
+            "Effect": "Allow",
+            "Action": "ec2:CreateTags",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "ec2:CreateAction": "RunInstances"
+                }
+            }
+        },
+        {
+                    "Sid": "ec2createtagsexisting",
+                    "Effect": "Allow",
+                    "Action": "ec2:CreateTags",
+                    "Resource": "*",
+                    "Condition": {
+                        "StringEquals": {
+                            "ec2:ResourceTag/Team": "A"
+                        },
+                        "ForAllValues:StringEquals": {
+                            "aws:TagKeys": [
+                                "Team",
+                                "User"
+                            ]
+                        },
+                        "StringEqualsIfExists": {
+                            "aws:RequestTag/Team": "A"
+                        }
+                    }
+        },
+        {
+                    "Sid": "VisualEditor0",
+                    "Effect": "Allow",
+                    "Action": [
+                        "ec2:Describe*",
+                        "ec2:Get*"
+                    ],
+                    "Resource": "*"
+        },
+        {
+                    "Sid": "ec2manageinstances",
+                    "Effect": "Allow",
+                    "Action": [
+                        "ec2:RebootInstances",
+                        "ec2:TerminateInstances",
+                        "ec2:StartInstances",
+                        "ec2:StopInstances"
+                    ],
+                    "Resource": "*",
+                    "Condition": {
+                        "StringEquals": {
+                            "ec2:ResourceTag/Team": "A"
+                        }
+                    }
+        },
+                {
+                    "Sid": "ec2runinstances",
+                    "Effect": "Allow",
+                    "Action": "ec2:RunInstances",
+                    "Resource": "arn:aws:ec2:*:*:instance/*",
+                    "Condition": {
+                        "StringEquals": {
+                            "aws:RequestTag/Team": "A"
+                        },
+                        "ForAllValues:StringEquals": {
+                            "aws:TagKeys": [
+                                "User",
+                                "Team"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "Sid": "ec2runinstancesother",
+                    "Effect": "Allow",
+                    "Action": "ec2:RunInstances",
+                    "Resource": [
+                        "arn:aws:ec2:*:*:subnet/*",
+                        "arn:aws:ec2:*:*:key-pair/*",
+                        "arn:aws:ec2:*::snapshot/*",
+                        "arn:aws:ec2:*:*:launch-template/*",
+                        "arn:aws:ec2:*:*:volume/*",
+                        "arn:aws:ec2:*:*:security-group/*",
+                        "arn:aws:ec2:*:*:placement-group/*",
+                        "arn:aws:ec2:*:*:network-interface/*",
+                        "arn:aws:ec2:*::image/*"
+                    ]
+                }
+            
+    ]
+}
